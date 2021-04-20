@@ -13,11 +13,14 @@ import ast
 class Program:
 
     # List of teams to build round fixture
-    toFixtureTeams = ["Adelaide", "Brisbane", "Carlton", "Collingwood",
+    # Constant list of all AFL teams
+    teamsList = ["Adelaide", "Brisbane", "Carlton", "Collingwood",
                       "Essendon", "Freemantle", "Geelong", "Gold Coast",
                       "Greater Western Sydney", "Hawthorn", "Melbourne",
                       "North Melbourne", "Port Adelaide", "Richmond",
                      "St. Kilda", "Sydney", "West Coast", "Western Bulldogs" ]
+    toFixtureTeams = teamsList # Assign teams list to utility variable
+    
     # Fixture instance variable
     roundFixture = ""
 
@@ -102,8 +105,17 @@ class Program:
     # Obtain fixture match information
     @staticmethod
     def __defineMatches():
-        numMatches = input("Enter number of matches for round " + str(Program.roundFixture.roundNo) + ": ")
-        for i in range(0, int(numMatches)):
+        okay = False
+        while not okay:
+            numMatches = input("Enter number of matches for round " + str(Program.roundFixture.roundNo) + ": ")
+            try:
+                numMatches = int(numMatches)
+                if numMatches > 0 and numMatches < 10:
+                    okay = True
+            except:
+                print("Invalid input entered. Please provide a number between 1 and 9 (inclusive).")
+                continue
+        for i in range(0, numMatches):
             print("\nDetails for Match " + str(i+1))
             Program.roundFixture.roundMatches.append(Program.__getMatch())
 
