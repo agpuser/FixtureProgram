@@ -110,36 +110,27 @@ class Program:
     # Obtain actual match data from user   
     @staticmethod
     def __getMatch():
-        okay = False
         match = Match()
-        matchDate = input("Enter date for match (ie. Sat May 12): ")
-        match.matchDate = matchDate
-        matchTime = input("Enter time for match (hh:mm): ")
-        match.matchTime = matchTime + "pm"
-        matchVenue = input("Enter venue for match: ")
-        match.matchVenue = matchVenue
-        Program.__printToFixtureTeams()
-        while not okay:
-            homeTeamNo = input("Enter home team number for match: ")
-            homeTeamNo = int(homeTeamNo)
-            if homeTeamNo <= len(Program.toFixtureTeams):
-                okay = True
-        # Remove selected home team from displayed team list
-        homeTeam = Program.toFixtureTeams[homeTeamNo-1]
-        Program.toFixtureTeams.pop(homeTeamNo-1)
-        match.homeTeam = homeTeam
-        Program.__printToFixtureTeams()
-        okay = False
-        while not okay:
-            awayTeamNo = input("Enter away team number for match: ")
-            awayTeamNo = int(awayTeamNo)
-            if awayTeamNo <= len(Program.toFixtureTeams):
-                okay = True
-        # Remove selected away team from displayed team list
-        awayTeam = Program.toFixtureTeams[awayTeamNo-1]
-        Program.toFixtureTeams.pop(awayTeamNo-1)
-        match.awayTeam = awayTeam
+        match.matchDate = input("Enter date for match (ie. Sat May 12): ")
+        match.matchTime = input("Enter time for match (hh:mm): ") + "pm"
+        match.matchVenue = input("Enter venue for match: ")
+        match.homeTeam = Program.__getTeam("home")
+        match.awayTeam = Program.__getTeam("away")
         return match
+
+    # Obtain home/away team for a match from user
+    def __getTeam(teamType):
+        okay = False
+        Program.__printToFixtureTeams()
+        while not okay:
+            teamNo = input("Enter " + teamType + " team number for match: ")
+            teamNo = int(teamNo)
+            if teamNo <= len(Program.toFixtureTeams):
+                okay = True
+        # Remove selected team from displayed team list
+        team = Program.toFixtureTeams[teamNo-1]
+        Program.toFixtureTeams.pop(teamNo-1)
+        return team        
 
     # Initiate Fixture object
     @staticmethod
