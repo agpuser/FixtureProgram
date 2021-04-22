@@ -105,16 +105,10 @@ class Program:
     # Obtain fixture match information
     @staticmethod
     def __defineMatches():
-        okay = False
-        while not okay:
-            numMatches = input("Enter number of matches for round " + str(Program.roundFixture.roundNo) + ": ")
-            try:
-                numMatches = int(numMatches)
-                if numMatches > 0 and numMatches < 10:
-                    okay = True
-            except:
-                print("Invalid input entered. Please provide a number between 1 and 9 (inclusive).")
-                continue
+        prompt = "Enter number of matches for round " + str(Program.roundFixture.roundNo) + ": "
+        start = 1
+        end = 9
+        numMatches = Program.__getNumericRangedInput(prompt, start, end)
         for i in range(0, numMatches):
             print("\nDetails for Match " + str(i+1))
             Program.roundFixture.roundMatches.append(Program.__getMatch())
@@ -131,11 +125,14 @@ class Program:
         return match
 
     # Obtain home/away team for a match from user
+    @staticmethod
     def __getTeam(teamType):
         okay = False
         Program.__printToFixtureTeams()
         while not okay:
             teamNo = input("Enter " + teamType + " team number for match: ")
+            if teamNo == "" or not teamNo.isnumeric():
+                continue
             teamNo = int(teamNo)
             if teamNo <= len(Program.toFixtureTeams):
                 okay = True
@@ -149,22 +146,32 @@ class Program:
     def __initFixture():
         Program.roundFixture = Fixture(Program.__getRoundNo())
 
-    # Obtain round number for user
+    # Obtain round number from user
     @staticmethod
     def __getRoundNo():
+        prompt = "Please enter round of fixture (1 to 22): "
+        start = 1
+        end = 22
+        result = Program.__getNumericRangedInput(prompt, start, end)
+        return result
+
+    # Utility method to obtain a numeric value from the user within a given range
+    @staticmethod
+    def __getNumericRangedInput(inPrompt, inStart, inEnd):
         okay = False # flag to signal valid user input
         while not okay:
-            round = input("Please enter round of fixture (1 to 22): ")
+            result = input(inPrompt)
             try:
-                round = int(round)
+                result = int(result)
             except:
-                print("Invalid input entered. Please provide a number between 1 and 22 (inclusive).")
+                print("Invalid input entered. Please provide a number between " + str(inStart) + " and " + str(inEnd) + " (inclusive).")
                 continue
-            if round >= 1 and round <= 22: # valid input
+            if result >= inStart and result <= inEnd: # valid input
                 okay = True
             else:
-                print("Invalid round number entered. Please provide a value from 1 to 22.")    
-        return round
+                print("Invalid number entered. Please provide a value from " + str(inStart) + " to " + str(inEnd) + ".")    
+        return result  
+    
     
                 
 
